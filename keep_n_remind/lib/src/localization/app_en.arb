@@ -1,0 +1,6 @@
+{
+  "appTitle": "keep_n_remind",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
