@@ -1,5 +1,5 @@
 # Secrets
-.env.json
+.env
 
 # Miscellaneous
 *.class

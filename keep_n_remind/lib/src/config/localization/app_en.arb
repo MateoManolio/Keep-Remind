@@ -1,0 +1,13 @@
+{
+  "appTitle": "keep_n_remind",
+  "@appTitle": {
+    "description": "The title of the application",
+    "home_title": "Keep And Remind",
+    "home_confirm_button": "Confirm",
+    "send_title": "Send",
+    "send_confirm_button": "Confirm",
+    "send_cancel_button": "Cancel",
+    "send_description": "Send a message to the user",
+    "send_button": "Send"
+  }
+}
