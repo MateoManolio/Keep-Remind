@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/data_state/data_status.dart';
 import '../../core/utils.dart';
 import '../controllers/home_controller.dart';
 import '../menu/menu_page.dart';
@@ -76,7 +77,15 @@ class _HomePageState extends State<HomePage> {
                     setState(() {
                       processing = false;
                     });
-                    context.push(SendPage.routeName, extra: notes);
+                    if (notes.status == DataStatus.success) {
+                      context.push(SendPage.routeName, extra: notes.data);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(notes.error ?? 'Error'),
+                        ),
+                      );
+                    }
                   }
                 },
                 child: processing

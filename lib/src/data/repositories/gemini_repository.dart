@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 
+import '../../core/data_state/data_state.dart';
+import '../../core/data_state/data_status.dart';
 import '../../core/promps.dart';
 import '../../domain/entities/note.dart';
 import '../../domain/entities/send_notes.dart';
@@ -19,7 +21,7 @@ class GeminiRepository implements IGeminiRepository {
   final IDatabaseRepository databaseRepository;
 
   @override
-  Future<SendNotes> generateNotes(String prompt) async {
+  Future<DataState<SendNotes>> generateNotes(String prompt) async {
     try {
       final notes = await databaseRepository.getNotes();
       final existingNotes = notes.map((e) => Part.text(e.toString())).toList();
@@ -38,39 +40,53 @@ class GeminiRepository implements IGeminiRepository {
         final newNotes = await _getNotes(newNotesModel);
         final updateNotes = await _getNotes(updateNotesModel);
 
-        return SendNotes(
-          newNotes: newNotes,
-          updateNotes: updateNotes,
-        );
+        if (newNotes.status == DataStatus.error ||
+            updateNotes.status == DataStatus.error) {
+          return DataState.error(newNotes.error ?? updateNotes.error);
+        }
+
+        return DataState.success(SendNotes(
+          newNotes: newNotes.data,
+          updateNotes: updateNotes.data,
+        ));
       });
     } catch (e) {
-      throw Exception('Error generando la nota: $e');
+      return DataState.error('Error generando la nota: $e');
     }
   }
 
-  Future<List<Note>> _getNotes(List<NoteModel> notes) {
-    return Future.wait(
-      notes.map((note) async {
+  Future<DataState<List<Note>>> _getNotes(List<NoteModel> notesModel) async {
+    final leadingIcon =
+        await generateLeadingIcon(notesModel.first.leadingIcon ?? 'event_note');
+
+    final notes = await Future.wait(
+      notesModel.map((note) async {
         return note.toEntity(
-          leadingIcon:
-              await generateLeadingIcon(note.leadingIcon ?? 'event_note'),
+          leadingIcon: leadingIcon.data!,
           createdAt: DateTime.now(),
         );
       }),
     );
+    if (leadingIcon.status == DataStatus.error) {
+      return DataState.error(leadingIcon.error);
+    }
+    return DataState(
+      status: leadingIcon.status,
+      data: notes,
+    );
   }
 
   @override
-  Future<IconData> generateLeadingIcon(String prompt) async {
+  Future<DataState<IconData>> generateLeadingIcon(String prompt) async {
     try {
       return await Gemini.instance.prompt(parts: [
         Part.text(Prompts.generateLeadingIcon + prompt),
         ...AppIcons.iconMapping.entries.map((e) => Part.text(e.toString())),
       ]).then((value) {
-        return AppIcons.getIconDataFromString(value?.output);
+        return DataState.success(AppIcons.getIconDataFromString(value?.output));
       });
     } catch (e) {
-      return Icons.note;
+      return DataState.error(e.toString());
     }
   }
 }
