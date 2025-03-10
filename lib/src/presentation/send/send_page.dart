@@ -38,7 +38,9 @@ class SendPage extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 16),
-              NotesListView(notes: notes),
+              NotesListView(
+                notes: notes,
+              ),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

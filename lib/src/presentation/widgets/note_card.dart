@@ -6,18 +6,24 @@ import '../../domain/entities/note.dart';
 class NoteCard extends StatelessWidget {
   final Note note;
   final bool simpleView;
+  final Function(Note) onEdit;
+  final Function(Note) onDelete;
   final Color? color;
 
   const NoteCard.simple({
     super.key,
     required this.note,
     this.color,
+    required this.onEdit,
+    required this.onDelete,
   }) : simpleView = true;
 
   const NoteCard.detailed({
     super.key,
     required this.note,
     this.color,
+    required this.onEdit,
+    required this.onDelete,
   }) : simpleView = false;
 
   @override
@@ -81,6 +87,10 @@ class NoteCard extends StatelessWidget {
                     .map((tag) => Chip(
                           label: Text(tag),
                           backgroundColor: Colors.grey[200],
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ))
                     .toList(),
               ),
@@ -95,19 +105,39 @@ class NoteCard extends StatelessWidget {
                       'Alarma: $alarmFormatted',
                       style: const TextStyle(
                         color: Colors.redAccent,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
               ),
             const SizedBox(height: 12),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: TextButton(
-                onPressed: () {},
-                child: const Text("Edit"),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              spacing: 8,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    onEdit(note);
+                  },
+                  child: const Text("Edit"),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.red,
+                    backgroundColor: Colors.red.withAlpha(25),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32),
+                      side: const BorderSide(color: Colors.red, width: 0.5),
+                    ),
+                  ),
+                  onPressed: () {
+                    onDelete(note);
+                  },
+                  child: const Text("Delete"),
+                ),
+              ],
             ),
           ],
         ),
@@ -181,14 +211,44 @@ class NoteCard extends StatelessWidget {
                           'Alarma: $alarmFormatted',
                           style: const TextStyle(
                             color: Colors.redAccent,
-                            //fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
-                    IconButton(
+                    PopupMenuButton<String>(
                       icon: const Icon(Icons.more_vert),
-                      onPressed: () {},
+                      onSelected: (value) {
+                        switch (value) {
+                          case 'edit':
+                            onEdit(note);
+                            break;
+                          case 'delete':
+                            onDelete(note);
+                            break;
+                        }
+                      },
+                      itemBuilder: (BuildContext context) => [
+                        const PopupMenuItem<String>(
+                          value: 'edit',
+                          child: Row(
+                            children: [
+                              Icon(Icons.edit, color: Colors.blue),
+                              SizedBox(width: 8),
+                              Text('Editar'),
+                            ],
+                          ),
+                        ),
+                        const PopupMenuItem<String>(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete, color: Colors.red),
+                              SizedBox(width: 8),
+                              Text('Eliminar'),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
