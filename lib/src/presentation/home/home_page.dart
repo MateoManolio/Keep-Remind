@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   IconButton(
                     onPressed: () {
-                      context.go(MenuPage.routeName);
+                      context.push(MenuPage.routeName);
                     },
                     icon: const Icon(Icons.login),
                   ),

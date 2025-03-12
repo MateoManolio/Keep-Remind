@@ -1,6 +1,7 @@
 import 'package:keep_n_remind/src/domain/entities/note.dart';
 import 'package:objectbox/objectbox.dart';
 
+import '../../core/data_state/data_state.dart';
 import '../../domain/i_repositories/i_database_repository.dart';
 import '../models/note_dto.dart';
 
@@ -15,8 +16,14 @@ class DatabaseRepository implements IDatabaseRepository {
   }
 
   @override
-  Future<List<Note>> getNotes() async {
-    return _notesBox.getAll().map((e) => e.toEntity()).toList();
+  Future<DataState<List<Note>>> getAllNotes() async {
+    try {
+      return DataState.success(
+        _notesBox.getAll().map((e) => e.toEntity()).toList(),
+      );
+    } catch (e) {
+      return DataState.error(e.toString());
+    }
   }
 
   @override

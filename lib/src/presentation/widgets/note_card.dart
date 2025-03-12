@@ -193,6 +193,10 @@ class NoteCard extends StatelessWidget {
                     .map((tag) => Chip(
                           label: Text(tag),
                           backgroundColor: Colors.grey[200],
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ))
                     .toList(),
               ),

@@ -17,6 +17,7 @@ class SendPage extends StatelessWidget {
   static const routeName = '/overlay';
   final SendNotes notes;
   final SendController sendController;
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -52,7 +53,7 @@ class SendPage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       sendController.saveNotes(notes.newNotes ?? []);
-                      context.go(MenuPage.routeName);
+                      context.push(MenuPage.routeName);
                     },
                     child: const Text('Confirmar'),
                   ),

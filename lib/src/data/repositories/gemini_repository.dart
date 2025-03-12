@@ -23,8 +23,10 @@ class GeminiRepository implements IGeminiRepository {
   @override
   Future<DataState<SendNotes>> generateNotes(String prompt) async {
     try {
-      final notes = await databaseRepository.getNotes();
-      final existingNotes = notes.map((e) => Part.text(e.toString())).toList();
+      final notes = await databaseRepository.getAllNotes();
+      final existingNotes =
+          notes.data?.map((e) => Part.text(e.toString())).toList() ?? [];
+
       final text = Prompts.generateNote + prompt;
       return await Gemini.instance.prompt(parts: [
         Part.text(text),
