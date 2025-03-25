@@ -10,7 +10,7 @@ class DeleteNoteUsecase extends IUsecase<dynamic, Note> {
       : _databaseRepository = databaseRepository;
 
   @override
-  Future<DataState<Note>> call(Note params) async {
+  Future<DataState<dynamic>> call(Note params) async {
     await _databaseRepository.deleteNote(params);
     return DataState.success(params);
   }

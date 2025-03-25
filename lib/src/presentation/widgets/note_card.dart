@@ -148,7 +148,7 @@ class NoteCard extends StatelessWidget {
   Widget _buildDetailedView(BuildContext context) {
     final createdAtFormatted = DateFormat('dd/MM/yyyy').format(note.createdAt);
     final alarmFormatted = note.alarmAt != null
-        ? DateFormat('dd/MM HH:mm').format(note.alarmAt!)
+        ? DateFormat('dd/MM - HH:mm').format(note.alarmAt!)
         : null;
 
     return Card(
@@ -219,46 +219,54 @@ class NoteCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    PopupMenuButton<String>(
-                      icon: const Icon(Icons.more_vert),
-                      onSelected: (value) {
-                        switch (value) {
-                          case 'edit':
-                            onEdit(note);
-                            break;
-                          case 'delete':
-                            onDelete(note);
-                            break;
-                        }
-                      },
-                      itemBuilder: (BuildContext context) => [
-                        const PopupMenuItem<String>(
-                          value: 'edit',
-                          child: Row(
-                            children: [
-                              Icon(Icons.edit, color: Colors.blue),
-                              SizedBox(width: 8),
-                              Text('Editar'),
-                            ],
-                          ),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: 'delete',
-                          child: Row(
-                            children: [
-                              Icon(Icons.delete, color: Colors.red),
-                              SizedBox(width: 8),
-                              Text('Eliminar'),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    _buildPopupMenu(context),
                   ],
                 ),
               ),
+            if (alarmFormatted == null) _buildPopupMenu(context),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPopupMenu(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: PopupMenuButton<String>(
+        icon: const Icon(Icons.more_vert),
+        onSelected: (value) {
+          switch (value) {
+            case 'edit':
+              onEdit(note);
+              break;
+            case 'delete':
+              onDelete(note);
+              break;
+          }
+        },
+        itemBuilder: (BuildContext context) => [
+          const PopupMenuItem<String>(
+            value: 'edit',
+            child: Row(
+              children: [
+                Icon(Icons.edit, color: Colors.blue),
+                SizedBox(width: 8),
+                Text('Editar'),
+              ],
+            ),
+          ),
+          const PopupMenuItem<String>(
+            value: 'delete',
+            child: Row(
+              children: [
+                Icon(Icons.delete, color: Colors.red),
+                SizedBox(width: 8),
+                Text('Eliminar'),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

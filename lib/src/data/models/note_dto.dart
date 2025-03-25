@@ -1,7 +1,7 @@
 import 'package:objectbox/objectbox.dart';
 
+import '../../core/extensions/icon_data_extension.dart';
 import '../../domain/entities/note.dart';
-import 'app_icons.dart';
 
 @Entity()
 class NoteDto {
@@ -33,7 +33,7 @@ class NoteDto {
         title: title,
         shortDescription: shortDescription,
         content: content,
-        leadingIcon: AppIcons.getIconDataFromString(leadingIcon),
+        leadingIcon: IconDataSerialization.fromIconString(leadingIcon),
         tags: tags,
         createdAt: createdAt,
         alarmAt: alarmAt,
@@ -44,7 +44,7 @@ class NoteDto {
         title: entity.title,
         shortDescription: entity.shortDescription,
         content: entity.content,
-        leadingIcon: entity.leadingIcon?.toString() ?? '',
+        leadingIcon: entity.leadingIcon?.toIconString() ?? '',
         tags: entity.tags,
         createdAt: entity.createdAt,
         alarmAt: entity.alarmAt,

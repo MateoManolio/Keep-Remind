@@ -5,11 +5,19 @@ import 'package:objectbox/objectbox.dart';
 import '../../data/models/note_dto.dart';
 import '../../data/repositories/database_repository.dart';
 import '../../data/repositories/gemini_repository.dart';
+import '../../data/repositories/mock_gemini_repository.dart';
+import '../../domain/entities/note.dart';
 import '../../domain/entities/send_notes.dart';
+import '../../domain/usecase/delete_note_usecase.dart';
 import '../../domain/usecase/generate_notes_usecase.dart';
+import '../../domain/usecase/get_all_notes_usecase.dart';
 import '../../domain/usecase/save_notes_usecase.dart';
+import '../../domain/usecase/update_note_usecase.dart';
+import '../../presentation/controllers/edit_notes_controller.dart';
 import '../../presentation/controllers/home_controller.dart';
+import '../../presentation/controllers/menu_page_controller.dart';
 import '../../presentation/controllers/send_controller.dart';
+import '../../presentation/edit_notes/edit_notes_page.dart';
 import '../../presentation/home/home_page.dart';
 import '../../config/settings/settings_controller.dart';
 import '../../config/settings/settings_view.dart';
@@ -25,6 +33,7 @@ class AppRouter {
   AppRouter(this.settingsController, this.notesBox);
 
   late final GoRouter router = GoRouter(
+    initialLocation: HomePage.routeName, //TODO: change to home
     routes: <GoRoute>[
       GoRoute(
         path: HomePage.routeName,
@@ -32,9 +41,7 @@ class AppRouter {
           return HomePage(
             homeController: HomeController(
               generateNotesUsecase: GenerateNotesUsecase(
-                geminiRepository: GeminiRepository(
-                  databaseRepository: DatabaseRepository(notesBox: notesBox),
-                ),
+                geminiRepository: MockGeminiRepository(),
               ),
             ),
           );
@@ -73,6 +80,9 @@ class AppRouter {
                 saveNotesUsecase: SaveNotesUsecase(
                   databaseRepository: DatabaseRepository(notesBox: notesBox),
                 ),
+                deleteNoteUsecase: DeleteNoteUsecase(
+                  databaseRepository: DatabaseRepository(notesBox: notesBox),
+                ),
               ),
             ),
             transitionsBuilder:
@@ -88,7 +98,30 @@ class AppRouter {
       GoRoute(
         path: MenuPage.routeName,
         builder: (BuildContext context, GoRouterState state) {
-          return const MenuPage();
+          return MenuPage(
+            menuController: MenuPageController(
+              getAllNotesUsecase: GetAllNotesUsecase(
+                databaseRepository: DatabaseRepository(notesBox: notesBox),
+              ),
+              deleteNoteUsecase: DeleteNoteUsecase(
+                databaseRepository: DatabaseRepository(notesBox: notesBox),
+              ),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: EditNotesPage.routeName,
+        builder: (BuildContext context, GoRouterState state) {
+          final note = state.extra as Note;
+          return EditNotesPage(
+            note: note,
+            editNotesController: EditNotesController(
+              updateNoteUseCase: UpdateNoteUsecase(
+                databaseRepository: DatabaseRepository(notesBox: notesBox),
+              ),
+            ),
+          );
         },
       ),
     ],

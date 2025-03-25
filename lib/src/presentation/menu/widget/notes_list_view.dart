@@ -8,11 +8,12 @@ class NotesListView extends StatefulWidget {
     super.key,
     required this.notes,
     required this.onDelete,
+    required this.onEdit,
   });
 
   final List<Note> notes;
   final Function(Note) onDelete;
-
+  final Function(Note) onEdit;
   @override
   State<NotesListView> createState() => _NotesListViewState();
 }
@@ -46,7 +47,7 @@ class _NotesListViewState extends State<NotesListView> {
       ...(widget.notes).map(
         (note) => NoteCard.detailed(
           note: note,
-          onEdit: (Note note) {},
+          onEdit: widget.onEdit,
           onDelete: (Note note) {
             final index = widget.notes.indexOf(note);
             widget.onDelete(note);

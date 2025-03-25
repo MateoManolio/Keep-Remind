@@ -7,7 +7,7 @@ import '../../domain/i_repositories/i_gemini_repository.dart';
 class MockGeminiRepository implements IGeminiRepository {
   @override
   Future<DataState<SendNotes>> generateNotes(String prompt) async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
     return DataState.success(
       SendNotes(
         newNotes: [

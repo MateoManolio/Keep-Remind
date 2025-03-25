@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/data_state/data_status.dart';
 import '../../domain/entities/note.dart';
 import '../controllers/menu_page_controller.dart';
+import '../edit_notes/edit_notes_page.dart';
 import 'widget/custom_drawer.dart';
 import 'widget/menu_appbar.dart';
 import 'widget/notes_list_view.dart';
@@ -27,6 +29,10 @@ class _MenuPageState extends State<MenuPage> {
   @override
   void initState() {
     super.initState();
+    _loadNotes();
+  }
+
+  void _loadNotes() {
     widget.menuController.getAllNotes().then(
       (value) {
         if (value.status == DataStatus.success) {
@@ -44,6 +50,13 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   @override
+  void didUpdateWidget(covariant MenuPage oldWidget) {
+    isLoading = true;
+    super.didUpdateWidget(oldWidget);
+    _loadNotes();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const CustomDrawer(),
@@ -58,6 +71,9 @@ class _MenuPageState extends State<MenuPage> {
                     notes: notes,
                     onDelete: (note) {
                       widget.menuController.deleteNote(note);
+                    },
+                    onEdit: (note) {
+                      context.push(EditNotesPage.routeName, extra: note);
                     },
                   ),
           ],

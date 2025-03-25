@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class Note {
   final int? id;
-  final String title;
-  final String shortDescription;
-  final String content;
-  final IconData? leadingIcon;
-  final List<String>? tags;
+  String title;
+  String shortDescription;
+  String content;
+  IconData? leadingIcon;
+  List<String>? tags;
   final DateTime createdAt;
-  final DateTime? alarmAt;
+  DateTime? alarmAt;
 
   Note({
     this.id,
