@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../home/home_page.dart';
 import 'custom_search_bar.dart';
 
 class MenuAppBar extends StatelessWidget {
@@ -27,7 +28,7 @@ class MenuAppBar extends StatelessWidget {
         ),
         CustomSearchBar(),
         IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () => context.go(HomePage.routeName),
           icon: Icon(Icons.logout, size: iconSize),
         ),
       ],
