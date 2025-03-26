@@ -20,7 +20,7 @@ import '../../presentation/controllers/send_controller.dart';
 import '../../presentation/edit_notes/edit_notes_page.dart';
 import '../../presentation/home/home_page.dart';
 import '../../config/settings/settings_controller.dart';
-import '../../config/settings/settings_view.dart';
+import '../settings/settings_page.dart';
 import '../../presentation/menu/menu_page.dart';
 import '../../presentation/send/send_page.dart';
 import '../../sample_feature/sample_item_list_view.dart';
@@ -60,9 +60,9 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: SettingsView.routeName,
+        path: SettingsPage.routeName,
         builder: (BuildContext context, GoRouterState state) {
-          return SettingsView(controller: settingsController);
+          return SettingsPage(controller: settingsController);
         },
       ),
       GoRoute(

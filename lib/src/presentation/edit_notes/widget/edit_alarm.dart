@@ -16,7 +16,7 @@ class EditAlarm extends StatefulWidget {
   final Function(Note) onUpdate;
 
   @override
-  _EditAlarmState createState() => _EditAlarmState();
+  State<EditAlarm> createState() => _EditAlarmState();
 }
 
 class _EditAlarmState extends State<EditAlarm> {

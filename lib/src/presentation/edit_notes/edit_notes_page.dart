@@ -19,7 +19,7 @@ class EditNotesPage extends StatefulWidget {
   static const routeName = '/edit-notes';
 
   @override
-  _EditNotesPageState createState() => _EditNotesPageState();
+  State<EditNotesPage> createState() => _EditNotesPageState();
 }
 
 class _EditNotesPageState extends State<EditNotesPage> {

@@ -55,7 +55,6 @@ class _EditIconState extends State<EditIcon> {
                       AppIcons.iconMapping.values.toList()[index];
                   Navigator.pop(context);
                   widget.onUpdate(newNote);
-                  print(newNote.leadingIcon);
                 });
               },
             );
